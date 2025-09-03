@@ -1,0 +1,86 @@
+name: ❓ Question
+description: Ask a question about usage, configuration, or general help
+title: "[QUESTION] "
+labels: ["question", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question! Please provide as much context as possible to help us give you the best answer.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: I'm trying to understand how to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to achieve? What's your use case?
+      placeholder: I'm setting up a MongoDB cluster for...
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What Have You Tried?
+      description: What have you already tried? What didn't work?
+      placeholder: I tried following the documentation but...
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version are you using?
+      placeholder: e.g., v1.0.0, latest
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What category does your question fall under?
+      options:
+        - Installation & Setup
+        - Configuration
+        - MongoDB Integration
+        - Authentication
+        - Docker Deployment
+        - API Usage
+        - Troubleshooting
+        - Best Practices
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Relevant environment information (OS, Python version, MongoDB version, etc.)
+      placeholder: |
+        OS: Ubuntu 22.04
+        Python: 3.10.2
+        MongoDB: 6.0.3
+        Docker: 20.10.21
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Any other details that might be helpful
+      placeholder: Any additional context...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

@@ -1,0 +1,120 @@
+version: '3.8'
+services:
+  # MongoDB Replica Set
+  mongodb1:
+    image: mongo:6.0
+    container_name: mongodb1
+    hostname: msk-mng01
+    ports:
+      - "27017:27017"
+    command: mongod --replSet rs0 --bind_ip_all
+    volumes:
+      - mongodb1_data:/data/db
+    restart: unless-stopped
+
+  mongodb2:
+    image: mongo:6.0
+    container_name: mongodb2
+    hostname: vlg-mng01
+    ports:
+      - "27018:27017"
+    command: mongod --replSet rs0 --bind_ip_all
+    volumes:
+      - mongodb2_data:/data/db
+    restart: unless-stopped
+
+  mongodb3:
+    image: mongo:6.0
+    container_name: mongodb3
+    hostname: msk-mnga01
+    ports:
+      - "27019:27017"
+    command: mongod --replSet rs0 --bind_ip_all
+    volumes:
+      - mongodb3_data:/data/db
+    restart: unless-stopped
+
+  # Dominus MongoDB Status Services
+  dominus-mongo1:
+    build: .
+    container_name: dominus-mongo1
+    env_file:
+      - .env
+    environment:
+      - SERVICE_NAME=dominus-mongo
+      - MONGODB_URI=mongodb://mongodb1:27017
+      - MONGODB_SERVER_NAME=mongodb1
+      - MONGODB_PRIORITY_STEP=100
+      - AUTH_TYPE=${AUTH_TYPE:-local}
+      - MANAGE_USERNAME=${MANAGE_USERNAME:-admin}
+      - MANAGE_PASSWORD=${MANAGE_PASSWORD:-admin123}
+      - USE_HTTPS=${USE_HTTPS:-true}
+      - SSL_CERTFILE=${SSL_CERTFILE:-certs/dominus_cert.pem}
+      - SSL_KEYFILE=${SSL_KEYFILE:-certs/dominus_key.pem}
+    hostname: msk-mng01
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb1
+    volumes:
+      - ./certs:/certs
+    restart: unless-stopped
+    user: "1000:1000"
+
+  dominus-mongo2:
+    build: .
+    container_name: dominus-mongo2
+    env_file:
+      - .env
+    environment:
+      - SERVICE_NAME=dominus-mongo
+      - MONGODB_URI=mongodb://mongodb2:27017
+      - MONGODB_SERVER_NAME=mongodb2
+      - MONGODB_PRIORITY_STEP=100
+      - AUTH_TYPE=${AUTH_TYPE:-local}
+      - MANAGE_USERNAME=${MANAGE_USERNAME:-admin}
+      - MANAGE_PASSWORD=${MANAGE_PASSWORD:-admin123}
+      - USE_HTTPS=${USE_HTTPS:-true}
+      - SSL_CERTFILE=${SSL_CERTFILE:-certs/dominus_cert.pem}
+      - SSL_KEYFILE=${SSL_KEYFILE:-certs/dominus_key.pem}
+    hostname: vlg-mng01
+    volumes:
+      - ./certs:/certs
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mongodb2
+    restart: unless-stopped
+    user: "1000:1000"
+
+  dominus-mongo3:
+    build: .
+    container_name: dominus-mongo3
+    env_file:
+      - .env
+    environment:
+      - SERVICE_NAME=dominus-mongo
+      - MONGODB_URI=mongodb://mongodb3:27017
+      - MONGODB_SERVER_NAME=mongodb3
+      - MONGODB_PRIORITY_STEP=100
+      - AUTH_TYPE=${AUTH_TYPE:-local}
+      - MANAGE_USERNAME=${MANAGE_USERNAME:-admin}
+      - MANAGE_PASSWORD=${MANAGE_PASSWORD:-admin123}
+      - USE_HTTPS=${USE_HTTPS:-true}
+      - SSL_CERTFILE=${SSL_CERTFILE:-certs/dominus_cert.pem}
+      - SSL_KEYFILE=${SSL_KEYFILE:-certs/dominus_key.pem}
+    hostname: msk-mnga01
+    ports:
+      - "8002:8000"
+    depends_on:
+      - mongodb3
+    volumes:
+      - ./certs:/certs
+    restart: unless-stopped
+    user: "1000:1000"
+
+volumes:
+  mongodb1_data:
+  mongodb2_data:
+  mongodb3_data:
+
