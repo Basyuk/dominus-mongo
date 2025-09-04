@@ -31,7 +31,7 @@ jobs:
           - 27017:27017
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -94,7 +94,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -130,7 +130,7 @@ jobs:
     if: github.event_name != 'pull_request'
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -171,7 +171,7 @@ jobs:
     if: github.event_name == 'release'
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Python
       uses: actions/setup-python@v4
